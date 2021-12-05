@@ -39,6 +39,47 @@ class BinarySearchTree implements INode {
     }
   }
 
+  findMinNode(node: Node): Node {
+    if (node.left === null) {
+      return node;
+    } else {
+      return this.findMinNode(node.left);
+    }
+  }
+
+  remove(number: number) {
+    this.root = this.removeNode(this.root, number);
+  }
+
+  removeNode(node: Node | null, key: number) {
+    if (node === null) return null;
+    else if (key < node.number) {
+      node.left = this.removeNode(node.left, key);
+      return node;
+    } else if (key > node.number) {
+      node.right = this.removeNode(node.right, key);
+      return node;
+    } else {
+      if (node.left === null && node.right === null) {
+        node = null;
+        return node;
+      }
+
+      if (node.left === null) {
+        node = node.right;
+        return node;
+      } else if (node.right === null) {
+        node = node.left;
+        return node;
+      }
+      const aux = this.findMinNode(node.right);
+      node.number = aux.data;
+
+      node.right = this.removeNode(node.right, aux.data);
+      return node;
+    }
+  }
+
   getRootNode() {
     return this.root;
   }
